@@ -64,6 +64,6 @@ public class Prestamo {
 	public String toString() {
 		return "libro: " +  this.isbnLibro + "  /  copia: " + this.nroCopia;
 	}
-	
+
 	
 }
