@@ -1,10 +1,15 @@
 package paquetePrincipal;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+
+import excepciones.LibroException;
+import utiles.ScannerConsola;
 
 public class Lector {
 
@@ -14,7 +19,7 @@ public class Lector {
 	private String direccion;
 	private Multa multa;
 
-	public Lector(long nroSocio, String nombre, String telefono, String direccion) {
+	public Lector(long nroSocio, String nombre, String telefono, String direccion){
 		super();
 		this.nroSocio = nroSocio;
 		this.nombre = nombre;
@@ -44,32 +49,37 @@ public class Lector {
 	// una copia
 	// vos realmente no elegis una copia, elegis un libro.
 	// cuando vas a devolver, ahi si devolves la copia
-	public Prestamo prestar(ArrayList<Libro> libros) {
+	public Prestamo prestar(ArrayList<Libro> libros) throws LibroException {
 		if (puedeAlquilar() == false) {
 			return null;
 		}
+		
 
-		Scanner sc = new Scanner(System.in);
+		ScannerConsola scannerConsola = new ScannerConsola();
 		Libro libroAPrestar = null;
 		Copia copiaAPrestar = null;
+		String nombreLibro = null;
 
+		
 		while (libroAPrestar == null) {
 
-			System.out.println("ingrese el libro que quiere alquilar: ");
-			String nombreLibro = sc.nextLine();
+			System.out.println("ingrese el libro que quiere alquilar: ");	        
+	        	nombreLibro = scannerConsola.leer();
 
+
+			
 			// busco el libro
 			for (int i = 0; i < libros.size(); i++) {
-				if (libros.get(i).getTitulo() == nombreLibro) {
+				if (libros.get(i).getTitulo().equals(nombreLibro)) {
 					libroAPrestar = libros.get(i);
 					break;
 				}
 			}
 
 			if (libroAPrestar == null)
-				System.out.println("ERROR: el libro ingresado no existe");
+				System.out.printf("libro inexistente, ");
 		}
-		sc.close();
+
 
 		// busco la primera copia que pueda prestar
 		for (int i = 0; i < libroAPrestar.getCopias().size(); i++) {
@@ -99,7 +109,11 @@ public class Lector {
 		return prestamo;
 	}
 
-	public Prestamo devolver(ArrayList<Prestamo> prestamos) {
+	public long getNroSocio() {
+		return nroSocio;
+	}
+
+	public Prestamo devolver(ArrayList<Prestamo> prestamos) throws LibroException {
 
 		boolean tieneAlMenosUnPrestamo = false;
 		System.out.println("LISTA DE LIBROS ALQUILADOS: ");
@@ -111,8 +125,7 @@ public class Lector {
 		}
 
 		if (tieneAlMenosUnPrestamo == false) {
-			System.out.println("ERROR: no registra ningun libro alquilado");
-			return null;
+			throw new LibroException("ERROR: el libro ingresado no existe");
 		}
 
 		Scanner sc = new Scanner(System.in);
@@ -129,8 +142,7 @@ public class Lector {
 				return prestamos.get(i);
 			}
 		}
-		System.out.println("no se ha encontrado el prestamo a devolver, intentelo denuevo");
-		return null;
+		throw new LibroException("no se ha encontrado el prestamo a devolver, intentelo denuevo");
 	}
 
 	private void multar(Prestamo prestamo) {
@@ -147,5 +159,4 @@ public class Lector {
 			this.multa.agregarDias(cantDiasDeMulta);
 		}
 	}
-
 }

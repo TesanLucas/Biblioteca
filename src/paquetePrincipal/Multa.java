@@ -29,7 +29,4 @@ public class Multa {
 		this.fin.plusDays(dias);
 	}
 	
-	
-	
-	
 }

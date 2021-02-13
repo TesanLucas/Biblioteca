@@ -3,9 +3,12 @@ package paquetePrincipal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import excepciones.LibroException;
+import excepciones.PrestamoException;
+
 public class Principal {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LibroException, PrestamoException {
 
 		Biblioteca biblioteca = new Biblioteca();
 		Lector lectorA = new Lector(0, "lectorA", null, null);
@@ -57,6 +60,16 @@ public class Principal {
 		biblioteca.agregarLibro(libro1);
 		biblioteca.agregarLibro(libro2);
 		biblioteca.agregarLibro(libro3);
+		
+		
+		Prestamo prestamo1;
+		Prestamo prestamo2;
+		
+		prestamo1 = lectorA.prestar(biblioteca.getLibros());
+		biblioteca.agregarPrestamo(prestamo1);
+		biblioteca.mostrarPrestamos();
+		prestamo2 = lectorB.prestar(biblioteca.getLibros()); 
+		biblioteca.agregarPrestamo(prestamo2);
 		
 		
 

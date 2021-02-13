@@ -20,6 +20,7 @@ public class Libro {
 		this.editorial = editorial;
 		this.anio = anio;
 		this.autor = autor;
+		this.copias = new ArrayList<Copia>();
 	}
 	
 	public String getISBN() {

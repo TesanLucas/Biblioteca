@@ -2,6 +2,10 @@ package paquetePrincipal;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import excepciones.LibroException;
+import excepciones.PrestamoException;
 
 public class Biblioteca {
 
@@ -13,7 +17,9 @@ public class Biblioteca {
 	private ArrayList<Prestamo> prestamos;
 
 	public Biblioteca() {
-
+		this.libros = new ArrayList<Libro>();
+		this.lectores = new ArrayList<Lector>();
+		this.prestamos = new ArrayList<Prestamo>();	
 	}
 
 	public ArrayList<Libro> getLibros() {
@@ -58,25 +64,54 @@ public class Biblioteca {
 			return true;
 	}
 	
-	public void agregarPrestamo(Prestamo prestamo) {
+	public void agregarPrestamo (Prestamo prestamo) throws PrestamoException{
 		
-		if(this.veriicarPrestamoValido(prestamo) == false) {
-			System.out.println("Error al registrar prestamo, el lector tiene 3 prestamos activos o alguno de sus prestamos esta vencido");
-			return;
+		if(prestamo == null || this.veriicarPrestamoValido(prestamo) == false) {
+			throw new PrestamoException("Error al registrar prestamo, el lector tiene 3 prestamos activos o alguno de sus prestamos esta vencido");
 		}
 		
 		this.prestamos.add(prestamo);
 		
-		// le cambio el estado a la copia
+		// le cambiamos el estado a la copia
 		for(int i = 0; i < this.libros.size(); i++) {
 			if(this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
-				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia());
+				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.PRESTADO);;
 				return;
 			}
-			
 		}
 	}
 	
+	
+	public void finalizarPrestamo(Prestamo prestamo) {
+//		Libro actual;
+//		Copia copia;
+//		Iterator<Libro> iterador = this.libros.iterator();
+		
+//		while(iterador.hasNext()) {
+//			actual = iterador.next();
+//			if(actual.getISBN() == prestamo.getIsbnLibro())
+//				break;
+//		}
+//		actual.getCopiaPorId(prestamo.getNroCopia());
+		
+		for(int i = 0; i < this.libros.size(); i++) {
+			if(this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
+				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.BIBLIOTECA);
+				return;
+			}
+		}
+	}
+	
+	public void mostrarPrestamos() {
+		
+		Prestamo actual;
+		Iterator<Prestamo> iterador = this.prestamos.iterator();
+		
+		while(iterador.hasNext()) {
+			actual = iterador.next();
+			System.out.println(actual.toString());
+		}
+	}
 	
 
 }
