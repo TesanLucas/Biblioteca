@@ -12,7 +12,7 @@ public class ScannerConsola {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	public String leer() {
+	public String nextLine() {
 		try {
 			entrada = reader.readLine();
 		} catch (Exception e) {
@@ -20,5 +20,15 @@ public class ScannerConsola {
 		}
 		return entrada;
 	}
-
+	
+	
+	
+	public long nextLong() {
+		try {
+			entrada = reader.readLine();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Integer.parseInt(entrada);
+	}
 }

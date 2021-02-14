@@ -27,8 +27,20 @@ public class Lector {
 		this.direccion = direccion;
 		this.multa = null;
 	}
+	
+	public void setMulta(Multa multa) {
+		this.multa = multa;
+	}
 
-	private boolean puedeAlquilar() {
+	public long getNroSocio() {
+		return nroSocio;
+	}
+	
+	public long getCantidadDiasDeMulta() {
+		return LocalDate.now().until(multa.getFin(), ChronoUnit.DAYS);
+	}
+
+	public boolean puedeAlquilar() {
 		LocalDate fechaActual = LocalDate.now();
 
 		if (this.multa != null) // si hay multa
@@ -64,7 +76,7 @@ public class Lector {
 		while (libroAPrestar == null) {
 
 			System.out.println("ingrese el libro que quiere alquilar: ");	        
-	        	nombreLibro = scannerConsola.leer();
+	        	nombreLibro = scannerConsola.nextLine();
 
 
 			
@@ -89,10 +101,8 @@ public class Lector {
 			}
 		} 
 
-		if (copiaAPrestar == null) {
-			System.out.println("no hay disponible una copia para el libro pedido");
-			return null;
-		}
+		if (copiaAPrestar == null) 
+			throw new LibroException("no hay disponible una copia para el libro pedido");
 
 		System.out.println("le vamos a prestar la siguiente copia del libro: " + copiaAPrestar.getIdCopia());
 
@@ -109,13 +119,12 @@ public class Lector {
 		return prestamo;
 	}
 
-	public long getNroSocio() {
-		return nroSocio;
-	}
-
 	public Prestamo devolver(ArrayList<Prestamo> prestamos) throws LibroException {
-
+		ScannerConsola sc = new ScannerConsola();
 		boolean tieneAlMenosUnPrestamo = false;
+		long idCopia;
+		
+		// muestro lista de libros alquilados por el lector si es que tiene
 		System.out.println("LISTA DE LIBROS ALQUILADOS: ");
 		for (int i = 0; i < prestamos.size(); i++) {
 			if (prestamos.get(i).getNroSocio() == this.nroSocio) {
@@ -125,18 +134,16 @@ public class Lector {
 		}
 
 		if (tieneAlMenosUnPrestamo == false) {
-			throw new LibroException("ERROR: el libro ingresado no existe");
+			System.out.println("sin libros alquilados");
 		}
 
-		Scanner sc = new Scanner(System.in);
 		System.out.println("ingrese el libro que quiere devolver: ");
 		String isbnLibro = sc.nextLine();
 		System.out.println("ingrese la copia que quiere devolver: ");
-		long idCopia = sc.nextLong();
-		sc.close();
+		idCopia = sc.nextLong();
 
 		for (int i = 0; i < prestamos.size(); i++) {
-			if (prestamos.get(i).getNroSocio() == this.nroSocio && prestamos.get(i).getIsbnLibro() == isbnLibro
+			if (prestamos.get(i).getNroSocio() == this.nroSocio && prestamos.get(i).getIsbnLibro().equals(isbnLibro) 
 					&& prestamos.get(i).getNroCopia() == idCopia) {
 				this.multar(prestamos.get(i)); // verificamos si hace falta multar, y si es asi, lo hacemos
 				return prestamos.get(i);
@@ -151,6 +158,8 @@ public class Lector {
 
 		// calculamos la cantidad de dias de multa
 		long cantDiasDeMulta = fechaActual.until(prestamo.getFin(), ChronoUnit.DAYS) * 2;
+		if(cantDiasDeMulta < 0)
+			cantDiasDeMulta *= -1;
 
 		if (this.multa == null) {
 			fechaFin = fechaActual.plusDays(cantDiasDeMulta);
