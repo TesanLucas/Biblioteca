@@ -1,0 +1,13 @@
+paquetePrincipal\Biblioteca.class
+paquetePrincipal\Copia.class
+paquetePrincipal\Libro.class
+paquetePrincipal\Principal.class
+paquetePrincipal\Multa.class
+paquetePrincipal\estadoCopia.class
+paquetePrincipal\Autor.class
+paquetePrincipal\Lector.class
+paquetePrincipal\Prestamo.class
+utiles\ScannerConsola.class
+excepciones\LibroException.class
+excepciones\PrestamoException.class
+paquetePrincipal\tipoLibro.class
