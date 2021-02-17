@@ -108,7 +108,7 @@ public class LectorTest {
 		prestamos = new ArrayList<Prestamo>();
 		prestamos.add(prestamo1);
 
-		multa = new Multa(LocalDate.now(), LocalDate.of(2020, 1, 1)); // multa vencida en 1999
+		multa = new Multa(LocalDate.now(), LocalDate.of(2020, 1, 1), lectorA.getNroSocio()); // multa vencida en 1999
 	}
 
 	@Test

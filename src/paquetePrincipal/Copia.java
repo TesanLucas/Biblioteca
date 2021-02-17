@@ -2,6 +2,7 @@ package paquetePrincipal;
 
 public class Copia {
 
+	//private String isbnLibro;		// proximo a corregir
 	private long idCopia;
 	private estadoCopia estado;
 	

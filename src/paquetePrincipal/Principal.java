@@ -71,7 +71,7 @@ public class Principal {
 		prestamo2 = lectorB.prestar(biblioteca.getLibros()); 
 		biblioteca.agregarPrestamo(prestamo2);
 		
-		
+		// sin implementar
 
 	}
 

@@ -1,5 +1,7 @@
 package testPaquetePrincipal;
 
+import static org.junit.Assert.fail;
+
 import java.time.LocalDate;
 
 import org.junit.Assert;
@@ -130,8 +132,9 @@ public class BibliotecaTest {
 
 		Prestamo prestamo = new Prestamo(libro1.getISBN(), libro1.getCopias().get(0).getIdCopia(),
 				lectorA.getNroSocio());
-		biblioteca.agregarPrestamo(prestamo);
-		Assert.assertEquals(true, true);
+		this.biblioteca.agregarPrestamo(prestamo);
+		System.out.println(copia11.getEstado());
+		Assert.assertEquals(estadoCopia.PRESTADO, copia11.getEstado());
 	}
 
 	@Test
@@ -145,6 +148,27 @@ public class BibliotecaTest {
 			Assert.assertTrue(true);
 			return;
 		}
+	}
+
+	@Test
+	public void finalizaPrestamoCorrectamente() {
+
+		Prestamo prestamo = new Prestamo(libro1.getISBN(), libro1.getCopias().get(0).getIdCopia(),
+				lectorA.getNroSocio()); // agregamos el unico prestamo a la lista de prestamos
+		try {
+			biblioteca.agregarPrestamo(prestamo);
+		} catch (PrestamoException e) {
+			Assert.assertTrue(true);
+			return;
+		}
+		biblioteca.finalizarPrestamo(prestamo);
+
+		if (copia11.getEstado().equals(estadoCopia.BIBLIOTECA)) {
+
+		} else {
+			Assert.assertTrue(false);
+		}
+
 	}
 
 }

@@ -1,13 +1,8 @@
 package paquetePrincipal;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
-
 import excepciones.LibroException;
 import utiles.ScannerConsola;
 
@@ -163,7 +158,7 @@ public class Lector {
 
 		if (this.multa == null) {
 			fechaFin = fechaActual.plusDays(cantDiasDeMulta);
-			this.multa = new Multa(fechaActual, fechaFin);
+			this.multa = new Multa(fechaActual, fechaFin, this.nroSocio);
 		} else {
 			this.multa.agregarDias(cantDiasDeMulta);
 		}

@@ -19,7 +19,7 @@ public class Biblioteca {
 	public Biblioteca() {
 		this.libros = new ArrayList<Libro>();
 		this.lectores = new ArrayList<Lector>();
-		this.prestamos = new ArrayList<Prestamo>();	
+		this.prestamos = new ArrayList<Prestamo>();
 	}
 
 	public ArrayList<Libro> getLibros() {
@@ -63,55 +63,50 @@ public class Biblioteca {
 		else
 			return true;
 	}
-	
-	public void agregarPrestamo (Prestamo prestamo) throws PrestamoException{
-		
-		if(prestamo == null || this.veriicarPrestamoValido(prestamo) == false) {
-			throw new PrestamoException("Error al registrar prestamo, el lector tiene 3 prestamos activos o alguno de sus prestamos esta vencido");
+
+	public void agregarPrestamo(Prestamo prestamo) throws PrestamoException {
+
+		if (prestamo == null || this.veriicarPrestamoValido(prestamo) == false) {
+			throw new PrestamoException(
+					"Error al registrar prestamo, el lector tiene 3 prestamos activos o alguno de sus prestamos esta vencido");
 		}
-		
+
 		this.prestamos.add(prestamo);
-		
+
 		// le cambiamos el estado a la copia
-		for(int i = 0; i < this.libros.size(); i++) {
-			if(this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
-				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.PRESTADO);;
+		for (int i = 0; i < this.libros.size(); i++) {
+			if (this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
+				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.PRESTADO);
+				;
 				return;
 			}
 		}
 	}
-	
-	
+
 	public void finalizarPrestamo(Prestamo prestamo) {
-//		Libro actual;
-//		Copia copia;
-//		Iterator<Libro> iterador = this.libros.iterator();
 		
-//		while(iterador.hasNext()) {
-//			actual = iterador.next();
-//			if(actual.getISBN() == prestamo.getIsbnLibro())
-//				break;
-//		}
-//		actual.getCopiaPorId(prestamo.getNroCopia());
-		
-		for(int i = 0; i < this.libros.size(); i++) {
-			if(this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
+		for(int i = 0; i < this.prestamos.size(); i++) {	
+			if(this.prestamos.get(i).equals(prestamo)) 
+				this.prestamos.remove(i);						
+		}
+
+		for (int i = 0; i < this.libros.size(); i++) {
+			if (this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
 				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.BIBLIOTECA);
 				return;
 			}
 		}
 	}
-	
+
 	public void mostrarPrestamos() {
-		
+
 		Prestamo actual;
 		Iterator<Prestamo> iterador = this.prestamos.iterator();
-		
-		while(iterador.hasNext()) {
+
+		while (iterador.hasNext()) {
 			actual = iterador.next();
 			System.out.println(actual.toString());
 		}
 	}
-	
 
 }

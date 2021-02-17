@@ -6,11 +6,16 @@ public class Multa {
 
 	private LocalDate inicio;
 	private LocalDate fin;
+	private long nroSocio;
 	
-	public Multa(LocalDate inicio, LocalDate fin) {
+	public Multa(LocalDate inicio, LocalDate fin, long nroSocio) {
 		super();
 		this.inicio = inicio;
 		this.fin = fin;
+		this.nroSocio = nroSocio;
+	}
+	public long getNroSocio() {
+		return nroSocio;
 	}
 	public LocalDate getInicio() {
 		return inicio;
