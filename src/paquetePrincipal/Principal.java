@@ -1,8 +1,6 @@
 package paquetePrincipal;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
 import excepciones.LibroException;
 import excepciones.PrestamoException;
 
@@ -64,15 +62,35 @@ public class Principal {
 		
 		Prestamo prestamo1;
 		Prestamo prestamo2;
+		Prestamo prestamo3;
+				
+		String libroDeseado = lectorA.obtenerNombreDeLibro();
+		prestamo1 = lectorA.prestar(biblioteca.getLibros(), libroDeseado);
+		if(prestamo1 != null) {			
+			biblioteca.agregarPrestamo(prestamo1);
+		}
+		else
+			System.out.println("error al agregar prestamo");		
 		
-		prestamo1 = lectorA.prestar(biblioteca.getLibros());
-		biblioteca.agregarPrestamo(prestamo1);
+		libroDeseado = lectorB.obtenerNombreDeLibro();
+		prestamo2 = lectorB.prestar(biblioteca.getLibros(), libroDeseado);
+		if(prestamo2 != null) {			
+			biblioteca.agregarPrestamo(prestamo2);
+		}
+		else
+			System.out.println("error al agregar prestamo");
+		
+		
+		libroDeseado = lectorB.obtenerNombreDeLibro();
+		prestamo3 = lectorC.prestar(biblioteca.getLibros(), libroDeseado);
+		if(prestamo3 != null) {			
+			biblioteca.agregarPrestamo(prestamo3);
+		}
+		else
+			System.out.println("error al agregar prestamo");
+		
+		
 		biblioteca.mostrarPrestamos();
-		prestamo2 = lectorB.prestar(biblioteca.getLibros()); 
-		biblioteca.agregarPrestamo(prestamo2);
-		
-		// sin implementar
-
 	}
 
 }

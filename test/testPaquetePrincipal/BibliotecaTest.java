@@ -106,34 +106,11 @@ public class BibliotecaTest {
 
 	// input: libro1
 	@Test
-	public void usuarioAlquilaCorrectamente() throws LibroException, PrestamoException {
-
-		Prestamo prestamo;
-		Prestamo prestamoEsperado;
-
-		prestamo = lectorA.prestar(biblioteca.getLibros());
-
-		prestamoEsperado = new Prestamo(libro1.getISBN(), libro1.getCopias().get(0).getIdCopia(),
-				lectorA.getNroSocio());
-		prestamoEsperado.setInicio(LocalDate.now());
-		;
-		if (prestamo.equals(prestamoEsperado)) {
-
-			Assert.assertEquals(true, true);
-			return;
-		}
-		Assert.assertEquals(true, false);
-		return;
-	}
-
-	// input: libro1
-	@Test
 	public void seRegistraPrestamoCorrectamente() throws LibroException, PrestamoException {
 
 		Prestamo prestamo = new Prestamo(libro1.getISBN(), libro1.getCopias().get(0).getIdCopia(),
 				lectorA.getNroSocio());
 		this.biblioteca.agregarPrestamo(prestamo);
-		System.out.println(copia11.getEstado());
 		Assert.assertEquals(estadoCopia.PRESTADO, copia11.getEstado());
 	}
 
@@ -168,7 +145,20 @@ public class BibliotecaTest {
 		} else {
 			Assert.assertTrue(false);
 		}
-
 	}
+	
+	@Test
+	public void seAcabanLasCopiasCorrectamente() {
+		copia11.cambiarEstadoCopia(estadoCopia.PRESTADO);
+		copia12.cambiarEstadoCopia(estadoCopia.PRESTADO);
+		try {
+			lectorA.prestar(biblioteca.getLibros(), "libro1");
+		} catch (LibroException e) {
+			Assert.assertEquals(e.getMessage(), "no hay disponible una copia para el libro pedido");
+			return;
+		}	
+		Assert.assertTrue(false);
+	}
+	
 
 }

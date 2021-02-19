@@ -113,29 +113,26 @@ public class LectorTest {
 
 	@Test
 	public void alquilaCorrectamente() {
-		// input: libro1 - libro2 - libro3
 		Prestamo prestamo = null;
 		try {
-			prestamo = lectorA.prestar(libros);
+			prestamo = lectorA.prestar(libros, "libro1");
 		} catch (LibroException e) {
 			Assert.fail();
 		}
-
 		if (prestamo == null)
-			Assert.fail();
+			Assert.assertTrue(false);
 		else
 			Assert.assertTrue(true);
 	}
 
 	@Test
 	public void noPuedeAlquilar() {
-
+		
 		lectorA.setMulta(multa);
 		if (lectorA.puedeAlquilar() == true)
 			Assert.fail();
 		else
 			Assert.assertTrue(true);
-
 	}
 
 	@Test
@@ -150,13 +147,11 @@ public class LectorTest {
 	public void devuelveCorrectamente() {
 		prestamos.get(0).setFin(LocalDate.of(2025,1,1));	// estamos en 2021, tenia tiempo para devolverla!
 		try {
-			lectorA.devolver(prestamos);
+			lectorA.devolver(prestamos, "000-001", 1);
 		} catch (LibroException e) {
 			e.printStackTrace();
 			Assert.fail();
 		}	
-		
-
 	}
 
 	@Test
@@ -164,7 +159,7 @@ public class LectorTest {
 		prestamos.get(0).setFin(LocalDate.of(2020,1,1));	//fecha de retorno vencida, deberia multar!
 		long cantDiasAMultar = LocalDate.now().until(LocalDate.of(2020,1,1), ChronoUnit.DAYS) * -2;
 		try {
-			lectorA.devolver(prestamos);
+			lectorA.devolver(prestamos, "000-001", 1);
 		} catch (LibroException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -172,4 +167,24 @@ public class LectorTest {
 		Assert.assertEquals(cantDiasAMultar, lectorA.getCantidadDiasDeMulta());
 	}
 	
+	@Test
+	public void alquila2Correctamente() {
+		Prestamo prestamo1 = null;
+		Prestamo prestamo2 = null;
+		try {
+			prestamo1 = lectorA.prestar(libros, "libro1");
+			prestamo2 = lectorA.prestar(libros, "libro1");
+		} catch (LibroException e) {
+			Assert.fail();
+		}
+		if (prestamo1 == null && prestamo2 == null)
+			Assert.assertTrue(false);
+		else
+			Assert.assertTrue(true);
+	}
+	
+	
+	
+	// deberia hacerse en bibliotecatest
+
 }
