@@ -1,11 +1,24 @@
 package paquetePrincipal;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Prestamo {
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Id;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
 
+@Entity
+public class Prestamo implements Serializable {
+
+	@Id
 	private String isbnLibro;
+	@Id
 	private long nroCopia;
+	@Id
 	private long nroSocio;
 	
 	private LocalDate inicio;
@@ -87,6 +100,23 @@ public class Prestamo {
 		return true;
 	}
 	
-	
+	public void persistir() {
+		
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		
+		try {
+
+			EntityTransaction tran = em.getTransaction();
+			tran.begin();
+			em.persist(this);
+			tran.commit();
+			em.close();
+
+		} catch (RollbackException e) {
+			System.out.println("error al persistir el prestamo");
+			//System.out.println(e.getCause());
+		}
+	}
 	
 }

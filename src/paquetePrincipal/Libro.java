@@ -1,15 +1,32 @@
 package paquetePrincipal;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
+
+@Entity
 public class Libro {
+	@Id
 	private String ISBN;
 	private String titulo;
 	private tipoLibro tipo;
 	private String editorial;
 	private int anio;
+	
+	@OneToOne
 	private Autor autor;
-	private ArrayList<Copia> copias;
+	
+	@OneToMany
+	private List<Copia> copias;
 
 	
 	public Libro(String iSBN, String titulo, tipoLibro tipo, String editorial, int anio, Autor autor) {
@@ -43,7 +60,7 @@ public class Libro {
 		return autor;
 	}
 	
-	public ArrayList<Copia> getCopias() {
+	public List<Copia> getCopias() {
 		return copias;
 	}
 
@@ -60,7 +77,24 @@ public class Libro {
 		return null;
 	}
 	
-	
+	public void persistir() {
+		
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		
+		try {
+
+			EntityTransaction tran = em.getTransaction();
+			tran.begin();
+			em.persist(this);
+			tran.commit();
+			em.close();
+
+		} catch (RollbackException e) {
+			System.out.println("error al persistir el libro: " + this.getISBN());
+			//System.out.println(e.getCause());
+		}
+	}
 	
 	
 }

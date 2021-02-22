@@ -1,12 +1,23 @@
 package paquetePrincipal;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Multa {
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
+@Embeddable
+public class Multa implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private LocalDate inicio;
 	private LocalDate fin;
-	private long nroSocio;
+	@Column(name="socio")
+	private long nroSocio; // usando esta clase como Embeddable este atributo no haria falta!
+	
+	public Multa() {
+		
+	}
 	
 	public Multa(LocalDate inicio, LocalDate fin, long nroSocio) {
 		super();

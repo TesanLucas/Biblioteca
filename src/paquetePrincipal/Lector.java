@@ -1,26 +1,47 @@
 package paquetePrincipal;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Id;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
+
 import excepciones.LibroException;
 import utiles.ScannerConsola;
 
-public class Lector {
+@Entity
+public class Lector implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+
+	@Id
 	private long nroSocio;
+	
 	private String nombre;
 	private String telefono;
 	private String direccion;
+	@Embedded
 	private Multa multa;
 
+	public Lector() {
+		
+	}
+	
 	public Lector(long nroSocio, String nombre, String telefono, String direccion) {
 		super();
 		this.nroSocio = nroSocio;
 		this.nombre = nombre;
 		this.telefono = telefono;
 		this.direccion = direccion;
-		this.multa = null;
+		this.multa = new Multa(null, null, this.nroSocio);
 	}
 
 	public void setMulta(Multa multa) {
@@ -77,14 +98,14 @@ public class Lector {
 	public boolean puedeAlquilar() {
 		LocalDate fechaActual = LocalDate.now();
 
-		if (this.multa != null) // si hay multa
+		if (this.multa.getInicio() != null) // si hay multa
 		{
 			if (this.multa.getFin().isBefore(fechaActual) == true) // si todavia no termino la multa
 			{
 				return false;
 			} else { // si ya termino la multa, retorno true y borro la multa (ya que no existe un
 				// historico de multas)
-				this.multa = null;
+				this.multa = new Multa(null, null, this.nroSocio);
 				return true;
 			}
 		} else // no hay multa
@@ -171,4 +192,24 @@ public class Lector {
 			this.multa.agregarDias(cantDiasDeMulta);
 		}
 	}
+	
+	public void persistir() {
+		
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		
+		try {
+
+			EntityTransaction tran = em.getTransaction();
+			tran.begin();
+			em.persist(this);
+			tran.commit();
+			em.close();
+
+		} catch (RollbackException e) {
+			System.out.println("error al persistir el lector: " + this.nombre);
+			//System.out.println(e.getCause());
+		}
+	}
+	
 }

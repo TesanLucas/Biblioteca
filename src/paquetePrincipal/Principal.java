@@ -10,6 +10,7 @@ public class Principal {
 
 		Biblioteca biblioteca = new Biblioteca();
 		Lector lectorA = new Lector(0, "lectorA", null, null);
+		lectorA.setMulta(null);
 		Lector lectorB = new Lector(1, "lectorB", null, null);
 		Lector lectorC = new Lector(2, "lectorC", null, null);
 		
@@ -59,7 +60,7 @@ public class Principal {
 		biblioteca.agregarLibro(libro2);
 		biblioteca.agregarLibro(libro3);
 		
-		
+		/*	// ejemplo de prueba
 		Prestamo prestamo1;
 		Prestamo prestamo2;
 		Prestamo prestamo3;
@@ -91,6 +92,22 @@ public class Principal {
 		
 		
 		biblioteca.mostrarPrestamos();
+	*/
+		
+		lectorA.persistir();
+		lectorB.persistir();
+		borges.persistir();	// deberia chequear si ya hay un autor con el mismo nombre, ya que el ID es autogenerado
+		copia11.persistir();
+		copia12.persistir();
+		copia13.persistir();
+		copia14.persistir();
+		
+		libro1.persistir();
+		//libro2.persistir();
+		//libro3.persistir();
+		
+		
+		
 	}
 
 }

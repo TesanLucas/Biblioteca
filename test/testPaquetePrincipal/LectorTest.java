@@ -59,6 +59,7 @@ public class LectorTest {
 	@Before
 	public void setUp() throws Exception {
 		lectorA = new Lector(0, "lectorA", null, null);
+		lectorA.setMulta(new Multa(null, null, lectorA.getNroSocio()));
 
 		borges = new Autor("Borges", "Argentina", LocalDate.of(1899, 1, 1));
 		garciaMarquez = new Autor("Garcia Marquez", "Colombia", LocalDate.of(1927, 2, 2));

@@ -3,8 +3,9 @@ package paquetePrincipal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import excepciones.LibroException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import excepciones.PrestamoException;
 
 public class Biblioteca {
@@ -41,6 +42,32 @@ public class Biblioteca {
 	public void agregarLector(Lector lectorNuevo) {
 		this.lectores.add(lectorNuevo);
 	}
+	
+	public void cargarLibros() {
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		this.libros = (ArrayList<Libro>)em.createQuery("select b from Libro b").getResultList();
+		System.out.println(this.libros.size() + "libros recuperados de la BD y cargados en memoria correctamente");
+		// no se por que me tira el warning, despues lo arreglo
+	}
+	
+	public void cargarPrestamos() {
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		this.prestamos = (ArrayList<Prestamo>)em.createQuery("select b from prestamo b").getResultList();
+		System.out.println(this.prestamos.size() + "prestamos recuperados de la BD y cargados en memoria correctamente");
+		// no se por que me tira el warning, despues lo arreglo
+	}
+	
+	public void cargarLectores() {
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		this.lectores = (ArrayList<Lector>)em.createQuery("select b from lectores b").getResultList();
+		System.out.println(this.prestamos.size() + "prestamos recuperados de la BD y cargados en memoria correctamente");
+		// no se por que me tira el warning, despues lo arreglo
+	}
+	
+	
 
 	/**
 	 * verificamos que no tenga mas de 2 prestamos activos o si alguno de ellos esta
@@ -72,12 +99,12 @@ public class Biblioteca {
 		}
 
 		this.prestamos.add(prestamo);
+		// agregar en la bd
 
 		// le cambiamos el estado a la copia
 		for (int i = 0; i < this.libros.size(); i++) {
 			if (this.libros.get(i).getISBN() == prestamo.getIsbnLibro()) {
 				this.libros.get(i).getCopiaPorId(prestamo.getNroCopia()).cambiarEstadoCopia(estadoCopia.PRESTADO);
-				;
 				return;
 			}
 		}
@@ -86,8 +113,10 @@ public class Biblioteca {
 	public void finalizarPrestamo(Prestamo prestamo) {
 		
 		for(int i = 0; i < this.prestamos.size(); i++) {	
-			if(this.prestamos.get(i).equals(prestamo)) 
+			if(this.prestamos.get(i).equals(prestamo)) {
 				this.prestamos.remove(i);						
+				// eliminar de la bd
+			}
 		}
 
 		for (int i = 0; i < this.libros.size(); i++) {
@@ -108,5 +137,6 @@ public class Biblioteca {
 			System.out.println(actual.toString());
 		}
 	}
+
 
 }
