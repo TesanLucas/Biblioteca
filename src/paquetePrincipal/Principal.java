@@ -13,7 +13,7 @@ public class Principal {
 		Lector lectorB = new Lector(1, "lectorB", null, null);
 		Lector lectorC = new Lector(2, "lectorC", null, null);
 		
-		Autor borges = new Autor("Borges", "Argentina", LocalDate.of(1899, 1, 1));
+		Autor borges = new Autor("Borgesss", "Argentina", LocalDate.of(1899, 1, 1));
 		Autor garciaMarquez = new Autor("Garcia Marquez", "Colombia", LocalDate.of(1927, 2, 2));
 		Autor poe = new Autor("Edgar Allan Poe", "EE-UU", LocalDate.of(1809, 3, 3));
 				
@@ -59,38 +59,7 @@ public class Principal {
 		biblioteca.agregarLibro(libro2);
 		biblioteca.agregarLibro(libro3);
 		
-		
-		Prestamo prestamo1;
-		Prestamo prestamo2;
-		Prestamo prestamo3;
-				
-		String libroDeseado = lectorA.obtenerNombreDeLibro();
-		prestamo1 = lectorA.prestar(biblioteca.getLibros(), libroDeseado);
-		if(prestamo1 != null) {			
-			biblioteca.agregarPrestamo(prestamo1);
-		}
-		else
-			System.out.println("error al agregar prestamo");		
-		
-		libroDeseado = lectorB.obtenerNombreDeLibro();
-		prestamo2 = lectorB.prestar(biblioteca.getLibros(), libroDeseado);
-		if(prestamo2 != null) {			
-			biblioteca.agregarPrestamo(prestamo2);
-		}
-		else
-			System.out.println("error al agregar prestamo");
-		
-		
-		libroDeseado = lectorB.obtenerNombreDeLibro();
-		prestamo3 = lectorC.prestar(biblioteca.getLibros(), libroDeseado);
-		if(prestamo3 != null) {			
-			biblioteca.agregarPrestamo(prestamo3);
-		}
-		else
-			System.out.println("error al agregar prestamo");
-		
-		
-		biblioteca.mostrarPrestamos();
+		borges.persistir();
 	}
 
 }
