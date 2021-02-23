@@ -13,6 +13,17 @@ import javax.persistence.Id;
 import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 
+/**
+ * 
+ * @author Lucas
+ * 
+ * aclaraciones de la clase:
+ * al persistir un objeto de esta clase en la base de datos, la misma le autogenera un id_autor.
+ * pero nunca se chequea si el autor ya existe en la base de datos con un distinto ID
+ *
+ */
+
+
 @Entity
 public class Autor implements Serializable {
 
@@ -24,6 +35,10 @@ public class Autor implements Serializable {
 	private String nacionalidad;
 	private LocalDate fechaNac;
 
+	public Autor() {
+		
+	}
+	
 	public Autor(String nombre, String nacionalidad, LocalDate fechaNac) {
 		super();
 		this.nombre = nombre;

@@ -149,8 +149,8 @@ public class BibliotecaTest {
 	
 	@Test
 	public void seAcabanLasCopiasCorrectamente() {
-		copia11.cambiarEstadoCopia(estadoCopia.PRESTADO);
-		copia12.cambiarEstadoCopia(estadoCopia.PRESTADO);
+		copia11.setEstado(estadoCopia.PRESTADO);
+		copia12.setEstado(estadoCopia.PRESTADO);
 		try {
 			lectorA.prestar(biblioteca.getLibros(), "libro1");
 		} catch (LibroException e) {

@@ -18,6 +18,10 @@ public class Copia implements Serializable{
 	private long idCopia;
 	private estadoCopia estado;
 	
+	public Copia() {
+		
+	}
+	
 	public Copia(long idCopia, estadoCopia estado) {
 		super();
 		this.idCopia = idCopia;
@@ -32,9 +36,27 @@ public class Copia implements Serializable{
 		return estado;
 	}
 	
-	public void cambiarEstadoCopia(estadoCopia estadoNuevo) {
-		this.estado = estadoNuevo;
+	public void setEstado(estadoCopia estado) {
+		this.estado = estado;
 	}
+	
+	public void actualizarCopiaEnBD() {
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		
+		try {
+			EntityTransaction tran = em.getTransaction();
+			tran.begin();
+			em.merge(this);
+			tran.commit();
+			em.close();
+
+		} catch (RollbackException e) {
+			System.out.println("error al actualizar la copia: " + this.getIdCopia());
+			//System.out.println(e.getCause());
+		}
+		
+	}	
 	
 	public void persistir() {
 		
@@ -54,6 +76,5 @@ public class Copia implements Serializable{
 			//System.out.println(e.getCause());
 		}
 	}
-	
 	
 }

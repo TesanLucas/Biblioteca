@@ -10,6 +10,7 @@ import javax.persistence.Embeddable;
 public class Multa implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	private boolean multado;
 	private LocalDate inicio;
 	private LocalDate fin;
 	@Column(name="socio")
@@ -19,8 +20,9 @@ public class Multa implements Serializable{
 		
 	}
 	
-	public Multa(LocalDate inicio, LocalDate fin, long nroSocio) {
+	public Multa(boolean multado, LocalDate inicio, LocalDate fin, long nroSocio) {
 		super();
+		this.multado = multado;
 		this.inicio = inicio;
 		this.fin = fin;
 		this.nroSocio = nroSocio;
@@ -39,6 +41,14 @@ public class Multa implements Serializable{
 	}
 	public void setFin(LocalDate fin) {
 		this.fin = fin;
+	}
+	
+	public void setMultado(boolean multado) {
+		this.multado = multado;
+	}
+	
+	public boolean getMultado() {
+		return this.multado;
 	}
 	
 	public void agregarDias(long dias) {

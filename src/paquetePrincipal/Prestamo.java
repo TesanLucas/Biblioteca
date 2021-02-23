@@ -25,6 +25,10 @@ public class Prestamo implements Serializable {
 	private LocalDate fin;	// fecha maxima para devolver y no tener multa
 	private LocalDate finReal;	// fecha que se devolvio
 
+	public Prestamo() {
+		
+	}
+	
 	public Prestamo(String isbnLibro, long nroCopia, long nroSocio) {
 		super();
 		this.isbnLibro = isbnLibro;
@@ -100,7 +104,7 @@ public class Prestamo implements Serializable {
 		return true;
 	}
 	
-	public void persistir() {
+	public boolean persistir() {
 		
 		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
 		EntityManager em = managerFactory.createEntityManager();
@@ -115,8 +119,29 @@ public class Prestamo implements Serializable {
 
 		} catch (RollbackException e) {
 			System.out.println("error al persistir el prestamo");
+			System.out.println(e.getCause());
+			return false;
+		}
+		return true;
+	}
+	
+	public void borrarDeLaBD() {
+		
+		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
+		EntityManager em = managerFactory.createEntityManager();
+		
+		try {
+			EntityTransaction tran = em.getTransaction();
+			tran.begin();
+			em.remove(this);
+			tran.commit();
+			em.close();
+
+		} catch (RollbackException e) {
+			System.out.println("error al borrar el prestamo ");
 			//System.out.println(e.getCause());
 		}
 	}
+	
 	
 }

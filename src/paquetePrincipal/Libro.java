@@ -18,7 +18,7 @@ public class Libro {
 	@Id
 	private String ISBN;
 	private String titulo;
-	private tipoLibro tipo;
+	private tipoLibro tipo;		// arreglar por que hibernate guarda tipoLibro como integer
 	private String editorial;
 	private int anio;
 	
@@ -28,6 +28,9 @@ public class Libro {
 	@OneToMany
 	private List<Copia> copias;
 
+	public Libro() {
+		
+	}
 	
 	public Libro(String iSBN, String titulo, tipoLibro tipo, String editorial, int anio, Autor autor) {
 		super();
@@ -82,6 +85,7 @@ public class Libro {
 		EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("ejsHibernate");
 		EntityManager em = managerFactory.createEntityManager();
 		
+		//this.autor.persistir();    // primero persistimos al autor
 		try {
 
 			EntityTransaction tran = em.getTransaction();
@@ -92,7 +96,7 @@ public class Libro {
 
 		} catch (RollbackException e) {
 			System.out.println("error al persistir el libro: " + this.getISBN());
-			//System.out.println(e.getCause());
+			System.out.println(e.getCause());
 		}
 	}
 	

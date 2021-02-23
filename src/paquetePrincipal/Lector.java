@@ -41,7 +41,7 @@ public class Lector implements Serializable{
 		this.nombre = nombre;
 		this.telefono = telefono;
 		this.direccion = direccion;
-		this.multa = new Multa(null, null, this.nroSocio);
+		this.multa = new Multa(false, null, null, this.nroSocio);
 	}
 
 	public void setMulta(Multa multa) {
@@ -105,7 +105,7 @@ public class Lector implements Serializable{
 				return false;
 			} else { // si ya termino la multa, retorno true y borro la multa (ya que no existe un
 				// historico de multas)
-				this.multa = new Multa(null, null, this.nroSocio);
+				this.multa = new Multa(false, null, null, this.nroSocio);
 				return true;
 			}
 		} else // no hay multa
@@ -185,9 +185,9 @@ public class Lector implements Serializable{
 		if (cantDiasDeMulta < 0)
 			cantDiasDeMulta *= -1;
 
-		if (this.multa == null) {
+		if (this.multa.getMultado() == false) {
 			fechaFin = fechaActual.plusDays(cantDiasDeMulta);
-			this.multa = new Multa(fechaActual, fechaFin, this.nroSocio);
+			this.multa = new Multa(true, fechaActual, fechaFin, this.nroSocio);
 		} else {
 			this.multa.agregarDias(cantDiasDeMulta);
 		}

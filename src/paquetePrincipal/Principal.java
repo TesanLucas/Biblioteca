@@ -10,7 +10,6 @@ public class Principal {
 
 		Biblioteca biblioteca = new Biblioteca();
 		Lector lectorA = new Lector(0, "lectorA", null, null);
-		lectorA.setMulta(null);
 		Lector lectorB = new Lector(1, "lectorB", null, null);
 		Lector lectorC = new Lector(2, "lectorC", null, null);
 		
@@ -52,6 +51,7 @@ public class Principal {
 		libro3.agregarCopia(copia33);
 		libro3.agregarCopia(copia34);
 		
+		/*
 		biblioteca.agregarLector(lectorA);
 		biblioteca.agregarLector(lectorB);
 		biblioteca.agregarLector(lectorC);
@@ -59,6 +59,7 @@ public class Principal {
 		biblioteca.agregarLibro(libro1);
 		biblioteca.agregarLibro(libro2);
 		biblioteca.agregarLibro(libro3);
+		*/
 		
 		/*	// ejemplo de prueba
 		Prestamo prestamo1;
@@ -93,21 +94,92 @@ public class Principal {
 		
 		biblioteca.mostrarPrestamos();
 	*/
-		
+		/*
 		lectorA.persistir();
 		lectorB.persistir();
-		borges.persistir();	// deberia chequear si ya hay un autor con el mismo nombre, ya que el ID es autogenerado
+		lectorC.persistir();
+		
+		//borges.persistir();	
+		//garciaMarquez.persistir();
+		//poe.persistir();
+		
 		copia11.persistir();
 		copia12.persistir();
 		copia13.persistir();
 		copia14.persistir();
 		
+		copia21.persistir();
+		copia22.persistir();
+		copia23.persistir();
+		copia24.persistir();
+		
+		copia31.persistir();
+		copia32.persistir();
+		copia33.persistir();
+		copia34.persistir();
+		
 		libro1.persistir();
-		//libro2.persistir();
-		//libro3.persistir();
+		libro2.persistir();
+		libro3.persistir();
+		*/
 		
-		
-		
+		biblioteca.obtenerInstanciasDeLibro();
+		biblioteca.obtenerInstanciasDeLectores();
+		biblioteca.obtenerInstanciasDePrestamos();
+		funcionesPrincipal funciones = new funcionesPrincipal();
+		funciones.alquilarLibro(lectorA, biblioteca);
 	}
+	
+	public static boolean alquilarLibro(Lector lector, Biblioteca biblioteca) {
+		
+		String libroDeseado = lector.obtenerNombreDeLibro();
+		try {
+			
+			//obtenemos el prestamo deseado y la copia que se va a prestar
+			
+			System.out.println(biblioteca.getLibros().get(0).getTitulo());
+			Prestamo prestamoDeseado = lector.prestar(biblioteca.getLibros(), libroDeseado);
+			Copia copiaPrestada = biblioteca.agregarPrestamo(prestamoDeseado);
+			
+			//persistimos prestamo y actualizamos la copia
+			prestamoDeseado.persistir();
+			copiaPrestada.actualizarCopiaEnBD();	//updateamos en la BD
+
+			
+		} catch (LibroException e) {
+			System.out.println(e.getMessage());
+			return false;
+		} catch (PrestamoException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public static boolean devolverLibro(Lector lector, Biblioteca biblioteca) {
+		
+		String isbn = lector.obtenerIsbnADevolver();
+		long idCopia = lector.obtenerIdCopiaADevolver(biblioteca.getPrestamos());
+		
+		try {
+			Prestamo prestamoADevolver = lector.devolver(biblioteca.getPrestamos(), isbn, idCopia);
+			prestamoADevolver.borrarDeLaBD();
+			
+			Copia copiaPrestada = biblioteca.finalizarPrestamo(prestamoADevolver);
+			copiaPrestada.actualizarCopiaEnBD();
+			
+		} catch (LibroException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return true;
+	}
+	
+	
+	
+	
 
 }
